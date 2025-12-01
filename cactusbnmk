@@ -1,0 +1,92 @@
+#!/bin/bash
+# =============================================================================
+# CACTUS - GitHub Contribution Graph Painter
+# =============================================================================
+# Paint art on your GitHub profile's contribution graph using backdated commits.
+#
+# Usage:
+#   ./cactusbnmk                              # Interactive mode
+#   ./cactusbnmk --help                       # Show help
+#   ./cactusbnmk --daily <repo> <theme>       # Daily cronjob mode
+#
+# =============================================================================
+
+set -euo pipefail
+
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly SCRIPT_DIR
+
+# Source all library modules
+source "${SCRIPT_DIR}/lib/colors.sh"
+source "${SCRIPT_DIR}/lib/config.sh"
+source "${SCRIPT_DIR}/lib/themes.sh"
+source "${SCRIPT_DIR}/lib/commit_painter.sh"
+source "${SCRIPT_DIR}/lib/cli.sh"
+
+# =============================================================================
+# Pre-flight Check
+# =============================================================================
+
+preflight_check() {
+    if ! command -v git &>/dev/null; then
+        echo -e "${CLR_RED}Error: git is required but not found${CLR_RESET}"
+        echo "Please install git before running CACTUS."
+        exit 1
+    fi
+}
+
+# =============================================================================
+# Main Entry Point
+# =============================================================================
+
+main() {
+    preflight_check
+    config_init
+
+    # Handle --daily mode for cronjob
+    if [[ "${1:-}" == "--daily" ]]; then
+        shift
+        run_daily_workflow "$@"
+        exit 0
+    fi
+
+    # Handle --help
+    if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
+        print_app_banner
+        echo "Usage: cactusbnmk [options]"
+        echo ""
+        echo "Options:"
+        echo "  --help, -h                  Show this help"
+        echo "  --version, -v               Show version"
+        echo "  --daily <repo> <theme>      Daily cronjob mode"
+        echo ""
+        echo "Interactive Commands:"
+        echo "  themes                      List all themes"
+        echo "  preview <theme>             Preview a theme"
+        echo "  paint <theme> <mode> [year] Create commits"
+        echo "  exit                        Exit"
+        echo ""
+        echo "Modes:"
+        echo "  current   Last 365 days (visible on profile now)"
+        echo "  previous  A past year (e.g., 2022)"
+        echo ""
+        echo "Examples:"
+        echo "  ./cactusbnmk                      # Interactive"
+        echo "  paint sunset current              # Paint last 365 days"
+        echo "  paint galaxy previous 2022        # Paint year 2022"
+        echo ""
+        exit 0
+    fi
+
+    # Handle --version
+    if [[ "${1:-}" == "--version" || "${1:-}" == "-v" ]]; then
+        echo "${APP_NAME} version ${APP_VERSION}"
+        exit 0
+    fi
+
+    # No arguments or unknown - run interactive mode
+    run_interactive_cli
+}
+
+main "$@"

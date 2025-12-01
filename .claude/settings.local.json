@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wc:*)",
+      "Bash(bash:*)",
+      "Bash(./cactusbnmk:*)",
+      "Bash(source lib/colors.sh)",
+      "Bash(source lib/config.sh:*)",
+      "Bash(source:*)",
+      "Bash(get_cell_date 0 0)",
+      "Bash(get_cell_date 51 6)",
+      "Bash(for theme in saturn heart pacman wave lightning galaxy matrix cactus diamond chess invaders)",
+      "Bash(do echo -e \"preview $theme\\\\nexit\")",
+      "Bash(done)"
+    ]
+  }
+}
