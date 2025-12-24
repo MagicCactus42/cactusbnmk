@@ -31,11 +31,18 @@ declare -g CURRENT_THEME=""
 show_commands() {
     echo ""
     echo -e "${CLR_BOLD}Commands:${CLR_RESET}"
-    echo -e "  ${CLR_CYAN}themes${CLR_RESET}                List all available themes"
-    echo -e "  ${CLR_CYAN}preview <theme>${CLR_RESET}       Preview pattern (e.g., ${CLR_GREEN}preview sunset${CLR_RESET})"
-    echo -e "  ${CLR_CYAN}paint <theme>${CLR_RESET}         Create commits to paint on GitHub"
-    echo -e "  ${CLR_CYAN}help${CLR_RESET}                  Show this help"
-    echo -e "  ${CLR_CYAN}exit${CLR_RESET}                  Exit (or Ctrl+C)"
+    echo -e "  ${CLR_CYAN}themes${CLR_RESET}                      List all available themes"
+    echo -e "  ${CLR_CYAN}preview <theme>${CLR_RESET}             Preview pattern"
+    echo -e "  ${CLR_CYAN}paint <theme> <mode> [brightness]${CLR_RESET}"
+    echo -e "                              Create commits to paint on GitHub"
+    echo -e "  ${CLR_CYAN}clean${CLR_RESET}                       Remove banner, restore original graph"
+    echo -e "  ${CLR_CYAN}help${CLR_RESET}                        Show this help"
+    echo -e "  ${CLR_CYAN}exit${CLR_RESET}                        Exit (or Ctrl+C)"
+    echo ""
+    echo -e "${CLR_DIM}Modes: current, previous <year>${CLR_RESET}"
+    echo -e "${CLR_DIM}Brightness: light, medium, high, heavy${CLR_RESET}"
+    echo ""
+    echo -e "${CLR_DIM}Example: paint pacman current heavy${CLR_RESET}"
     echo ""
 }
 
@@ -102,6 +109,9 @@ process_command() {
             ;;
         "paint")
             run_paint_workflow $args
+            ;;
+        "clean"|"remove"|"delete"|"undo")
+            run_clean_workflow $args
             ;;
         "help"|"h"|"?"|"commands")
             show_commands
