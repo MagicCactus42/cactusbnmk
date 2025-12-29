@@ -30,7 +30,8 @@ Creates backdated git commits to draw patterns on your GitHub profile's contribu
 |---------|-------------|
 | `themes` | List all available themes |
 | `preview <theme>` | Preview how it will look on GitHub |
-| `paint <theme> <mode> [year]` | Create the commits |
+| `paint <theme> <mode> [brightness]` | Create the commits |
+| `clean [repo-name]` | Remove banner, restore original graph |
 | `exit` | Exit |
 
 ## Modes
@@ -38,35 +39,41 @@ Creates backdated git commits to draw patterns on your GitHub profile's contribu
 | Mode | Description |
 |------|-------------|
 | `current` | Paint on the last 365 days (visible on your profile now) |
-| `previous` | Paint on a past year (e.g., 2022, 2023) |
+| `previous <year>` | Paint on a past year (e.g., 2022, 2023) |
+
+## Brightness Levels
+
+| Level | Commits/Cell | Best For |
+|-------|--------------|----------|
+| `light` | 3 | Low activity profiles |
+| `medium` | 8 | Moderate activity |
+| `high` | 15 | Active contributors |
+| `heavy` | 25 | Very active profiles |
+
+If you don't specify brightness, the script will ask for your GitHub username to auto-detect the right level, or let you choose manually.
 
 ## Usage Examples
 
-### Interactive Mode
+### Quick Start
 
 ```bash
-$ ./cactusbnmk
-
-cactus> themes
-cactus> preview sunset
-cactus> paint sunset current
+cactus> paint pacman current heavy
 ```
 
-### Paint the Current Year (Last 365 Days)
+### With Auto-Detection
 
 ```bash
 cactus> paint sunset current
+# Enter your GitHub username when prompted
 ```
-
-This paints the pattern over the last 365 days, which is what's visible on your GitHub profile right now.
 
 ### Paint a Previous Year
 
 ```bash
-cactus> paint galaxy previous 2022
+cactus> paint galaxy previous 2022 high
 ```
 
-This paints the pattern in the year 2022. Useful for filling in older years on your profile.
+This paints the pattern in the year 2022 with high brightness.
 
 ## After Painting
 
@@ -78,6 +85,24 @@ git push -u origin main
 ```
 
 The pattern appears on your contribution graph within minutes.
+
+## Removing the Banner
+
+To remove the banner and restore your original contribution graph:
+
+```bash
+cactus> clean
+```
+
+This will:
+1. Delete the remote repository on GitHub (requires `gh` CLI)
+2. Delete the local repository
+3. Your contribution graph will return to normal within minutes
+
+For previous year banners:
+```bash
+cactus> clean github-banner-2022
+```
 
 ## Themes (12)
 
